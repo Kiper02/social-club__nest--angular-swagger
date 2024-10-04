@@ -5,14 +5,24 @@ import { UserModule } from './user/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './user/user.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import * as path from 'path';
 import { FileService } from './file/file.service';
 import { FileModule } from './file/file.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { RoleModule } from './role/role.module';
+import { Role } from './role/role.model';
+import { UserRole } from './role/user-role.model';
 
 @Module({
   controllers: [AppController],
   providers: [AppService, FileService],
-  imports: [UserModule,
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true
+    }),
+    UserModule,
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: process.env.DB_HOST,
@@ -20,12 +30,17 @@ import { FileModule } from './file/file.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      models: [User],
+      models: [User, Role, UserRole],
+      autoLoadModels: true
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'static'),
+      rootPath: path.resolve(__dirname, 'static')
     }),
     FileModule,
+    AuthModule,
+    RoleModule,
   ],
 })
 export class AppModule {}
+
+

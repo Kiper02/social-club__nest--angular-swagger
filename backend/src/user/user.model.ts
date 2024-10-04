@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { Role } from "src/role/role.model";
+import { UserRole } from "src/role/user-role.model";
 
 
 
@@ -25,6 +27,6 @@ export class User extends Model<User> {
     @Column({type: DataType.STRING, allowNull: false})
     avatar: string;
 
-    @Column({type: DataType.ARRAY(DataType.STRING), defaultValue: ['USER']})
-    roles: Array<String>
+    @BelongsToMany(() => Role, () => UserRole)
+    roles: Role[]
 }

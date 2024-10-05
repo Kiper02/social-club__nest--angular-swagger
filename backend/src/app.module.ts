@@ -13,6 +13,12 @@ import { ConfigModule } from '@nestjs/config';
 import { RoleModule } from './role/role.module';
 import { Role } from './role/role.model';
 import { UserRole } from './role/user-role.model';
+import { ChatModule } from './chat/chat.module';
+import { Chat } from './chat/chat.model';
+import { ChatParticipants } from './chat/chat-user.model';
+import { MessageModule } from './message/message.module';
+import { File } from './file/file.model';
+import { Message } from './message/message.model';
 
 @Module({
   controllers: [AppController],
@@ -30,7 +36,7 @@ import { UserRole } from './role/user-role.model';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      models: [User, Role, UserRole],
+      models: [User, Role, UserRole, Chat, ChatParticipants, File, Message],
       autoLoadModels: true
     }),
     ServeStaticModule.forRoot({
@@ -39,6 +45,8 @@ import { UserRole } from './role/user-role.model';
     FileModule,
     AuthModule,
     RoleModule,
+    ChatModule,
+    MessageModule,
   ],
 })
 export class AppModule {}

@@ -4,7 +4,6 @@ import { CreateUserDto } from './dto/create-user-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ChangeAvatarDto } from './dto/change-avatar-dto';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
-import { RoleGuard } from 'src/guards/role/role.guard';
 import { Roles } from 'src/guards/role/role.decorator';
 
 @Controller('user')

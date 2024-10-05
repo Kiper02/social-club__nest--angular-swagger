@@ -17,6 +17,9 @@ import { ChatParticipants } from 'src/chat/chat-user.model';
     SequelizeModule.forFeature([User, Role, UserRole, Chat, ChatParticipants]),
     RoleModule,
     FileModule
+  ],
+  exports: [
+    UserService
   ]
 })
 export class UserModule {}

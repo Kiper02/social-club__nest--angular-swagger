@@ -6,12 +6,14 @@ import { User } from 'src/user/user.model';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ChangePasswordDto } from './dto/change-password-dto';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
     private jwtService: JwtService,
+    private userService: UserService
   ) {}
 
   async registration(createUserDto: CreateUserDto) {
@@ -25,10 +27,7 @@ export class AuthService {
       );
     }
     const hashPassword = await bcrypt.hash(createUserDto.password, 4);
-    const user = await this.userRepository.create({
-      ...createUserDto,
-      password: hashPassword,
-    });
+    const user = await this.userService.create({...createUserDto, password: hashPassword,})
     const token = this.jwtGenerate(user);
     return token;
   }

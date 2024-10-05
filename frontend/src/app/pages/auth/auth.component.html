@@ -1,0 +1,20 @@
+<div class="wrapp">
+    <form class="form" [formGroup]="currentFormGroup">
+        <h1 class="form__heading">{{ url === 'login' ? 'Авторизация' : 'Регистрация' }}</h1>
+
+        <div *ngIf="url === 'registration'" class="form__fields">
+            <input placeholder="Фамилия" class="form__field" formControlName="surname" required/>
+            <input placeholder="Имя" class="form__field" formControlName="name" required/>
+            <input placeholder="Отчество" class="form__field" formControlName="patronymic" required/>
+        </div>
+        <input placeholder="Email" class="form__field" formControlName="email" required/>
+        <input placeholder="Пароль" class="form__field" type="password" formControlName="password" required/>
+
+        <button 
+            class="form__btn"
+            (click)="url === 'login' ? login() : registration()"    
+        >
+        {{ url === 'login' ? 'Войти' : 'Зарегистрироваться' }}
+        </button>
+    </form>
+</div>

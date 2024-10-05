@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
 import { ChatParticipants } from "src/chat/chat-user.model";
 import { Chat } from "src/chat/chat.model";
@@ -8,24 +9,31 @@ import { UserRole } from "src/role/user-role.model";
 
 @Table({tableName: 'user'})
 export class User extends Model<User> {
+    @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
     @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})
     id: number;
 
+    @ApiProperty({example: 'Иванов', description: 'Фамилия'})
     @Column({type: DataType.STRING, allowNull: false})
     surname: string;
 
+    @ApiProperty({example: 'Иван', description: 'Имя'})
     @Column({type: DataType.STRING, allowNull: false})
     name: string;
 
+    @ApiProperty({example: 'Иванович', description: 'Отчество'})
     @Column({type: DataType.STRING, allowNull: false})
     patronymic: string;
 
+    @ApiProperty({example: 'examplePassword', description: 'Пароль'})
     @Column({type: DataType.STRING, allowNull: false})
     password: string;
 
+    @ApiProperty({example: 'exampleemail@mail.ru', description: 'Почтовый адрес'})
     @Column({type: DataType.STRING, allowNull: false})
     email: string;
 
+    @ApiProperty({example: 'avatar.jpg', description: 'Изображение профиля'})
     @Column({type: DataType.STRING, allowNull: false})
     avatar: string;
 

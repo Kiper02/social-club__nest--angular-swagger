@@ -44,12 +44,4 @@ export class ChatController {
     addUserInChat(@Body() addUserInChatDto: AddUserInChatDto) {
         return this.chatService.addUserInChat(addUserInChatDto);
     }
-
-    @ApiOperation({summary: 'Получить последнее сообщение чата'})
-    @ApiResponse({status: 200, type: Message})
-    @Get(':chatId')
-    getLastMessage(@Param('chatId') chatId: number) {
-        return this.chatService.getLastMessage(chatId);
-    }
-
 }

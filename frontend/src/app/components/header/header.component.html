@@ -1,0 +1,26 @@
+<header class="header">
+  <div class="container">
+    <ul class="header__list">
+        <li class="header__list__item">
+          <div class="header__list__item__logo">
+            <h2 class="header__list__item__logo__heading">SC</h2>
+            Social Club
+          </div>
+          
+        </li>
+        <li class="header__list__item">
+            <div class="header__list__item-wrapp">
+              <div class="header__list__item-wrapp-image">
+                <img class="header__list__item__img" src="{{avatar}}"/>
+              </div>
+              <button 
+                class="header__list__item__btn"
+                (click)="logout()"
+                >
+                Выйти
+              </button>
+            </div>
+        </li>
+      </ul>
+  </div>
+</header>

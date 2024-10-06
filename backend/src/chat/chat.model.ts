@@ -21,6 +21,15 @@ export class Chat extends Model<Chat> {
     @Column({type: DataType.BOOLEAN, defaultValue: false})
     isGroup: boolean;
 
+    @ApiProperty({example: '1', description: 'Уникальный идентификатор пользователя создающего чат'})
+    @Column({type: DataType.INTEGER, allowNull: false})
+    userId: number
+
+    @ApiProperty({example: 'Привет', description: 'Последнее сообщение в чате'})
+    @ForeignKey(() => Message)
+    @Column({type: DataType.INTEGER, allowNull: true})
+    lastMessageId: number
+
     @BelongsToMany(() => User, () => ChatParticipants)
     users: [User]
 

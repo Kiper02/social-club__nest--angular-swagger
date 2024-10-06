@@ -19,6 +19,9 @@ import { ChatParticipants } from './chat/chat-user.model';
 import { MessageModule } from './message/message.module';
 import { File } from './file/file.model';
 import { Message } from './message/message.model';
+import { FreindModule } from './freind/freind.module';
+import { Freind } from './freind/freind.model';
+import { FreindRequest } from './freind/freind-request.model';
 
 @Module({
   controllers: [AppController],
@@ -36,8 +39,9 @@ import { Message } from './message/message.model';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      models: [User, Role, UserRole, Chat, ChatParticipants, File, Message],
-      autoLoadModels: true
+      models: [User, Role, UserRole, Chat, ChatParticipants, File, Message, Freind, FreindRequest],
+      autoLoadModels: true,
+      // sync: {force: true}
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static')
@@ -47,6 +51,7 @@ import { Message } from './message/message.model';
     RoleModule,
     ChatModule,
     MessageModule,
+    FreindModule,
   ],
 })
 export class AppModule {}

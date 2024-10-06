@@ -5,17 +5,21 @@ import { File } from 'src/file/file.model';
 import { EFileType, FileService } from 'src/file/file.service';
 import { Message } from './message.model';
 import { CreateMessageDto } from './dto/create-message-dto';
+import { Chat } from 'src/chat/chat.model';
 
 @Injectable()
 export class MessageService {
     constructor(
         @InjectModel(File) private fileRepository: typeof File,
         @InjectModel(Message) private messageRepository: typeof Message,
+        @InjectModel(Chat) private chatRepository: typeof Chat,
         private fileService: FileService
     ) {}
 
     async createMessage(createMessageDto: CreateMessageDto) {
         const message = await this.messageRepository.create(createMessageDto)
+        const chat = await this.chatRepository.findOne({where: {id: createMessageDto.chatId}});
+        await chat.update({lastMessageId: message.id})
         return message;
     }
 

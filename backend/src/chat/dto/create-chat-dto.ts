@@ -10,4 +10,7 @@ export class CreateChatDto {
     @ApiProperty({example: 'чат группы', description: 'Название чата'})
     @IsBoolean({message: 'Должно быть булевым значением'})
     isGroup: boolean;
+
+    @ApiProperty({example: '1', description: 'Уникальный идентификатор пользователя создающего чат'})
+    userId: number
 }

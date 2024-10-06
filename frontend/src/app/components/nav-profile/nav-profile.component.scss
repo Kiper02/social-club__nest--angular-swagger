@@ -1,0 +1,32 @@
+.wrapp {
+    width: 200px;
+    padding: 5px;
+
+    font-family: "Roboto", sans-serif;
+    line-height: 15px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.list__item {
+    padding: 5px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 13px;
+    list-style-type: none;
+    cursor: pointer;
+    border-radius: 3px;
+
+    transition: background-color 0.2s ease-in;
+}
+
+.list__item:hover {
+    background-color: #3d3c3c98;
+}

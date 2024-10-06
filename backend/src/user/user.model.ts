@@ -1,7 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { ChatParticipants } from "src/chat/chat-user.model";
 import { Chat } from "src/chat/chat.model";
+import { FreindRequest } from "src/freind/freind-request.model";
+import { Freind } from "src/freind/freind.model";
 import { Role } from "src/role/role.model";
 import { UserRole } from "src/role/user-role.model";
 
@@ -42,4 +44,10 @@ export class User extends Model<User> {
     
     @BelongsToMany(() => Chat, () => ChatParticipants)
     chats: Chat[]
+
+    @HasMany(() => Freind)
+    freinds: Freind[];
+
+    @HasMany(() => FreindRequest)
+    freindRequests: FreindRequest[]
 }

@@ -6,21 +6,38 @@ import { User } from 'src/user/user.model';
 import { AddUserInChatDto } from './dto/addUserInChat-dto';
 import { RemoveChatDto } from './dto/remove-chat-dto';
 import { Message } from 'src/message/message.model';
+import { Op } from 'sequelize';
+import sequelize from 'sequelize';
+
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectModel(Chat) private chatRepository: typeof Chat,
     @InjectModel(User) private userRepository: typeof User,
+    @InjectModel(Message) private messageRepository: typeof Message
   ) {}
 
   async create(createChatDto: CreateChatDto) {
+    const user = await this.userRepository.findOne({where: {id: createChatDto.userId}})
+    if(!user) {
+      throw new HttpException('Пользователь с таким id не найден', HttpStatus.NOT_FOUND);
+    }
     const chat = await this.chatRepository.create(createChatDto);
     return chat;
   }
 
   async getChatsUser(id: number) {
-    const chats = await this.chatRepository.findAll({ where: { id } });
+    let chats = await this.chatRepository.findAll({
+      where: { userId: id },
+      include: [
+        {
+          model: Message,
+          required: false, 
+        where: { id: { [Op.col]: 'Chat.lastMessageId' } },
+        },
+      ],
+    });
     return chats;
   }
 
@@ -54,21 +71,5 @@ export class ChatService {
       statusCode: HttpStatus.OK,
       message: 'Пользователь добавлен в чат',
     };
-  }
-
-  async getLastMessage(chatId: number) {
-    const chat = await this.chatRepository.findByPk(chatId);
-    if (!chat) {
-      throw new HttpException(
-        'Чата с таким id не существует',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    const messages = await this.chatRepository.findAll({
-      include: [{
-        model: Message
-      }]
-    })
-    return messages; // последнее сообщение в чате
   }
 }

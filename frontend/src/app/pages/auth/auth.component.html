@@ -1,4 +1,4 @@
-<div class="wrapp">
+<section class="auth">
     <form class="form" [formGroup]="currentFormGroup">
         <h1 class="form__heading">{{ url === 'login' ? 'Авторизация' : 'Регистрация' }}</h1>
 
@@ -16,5 +16,6 @@
         >
         {{ url === 'login' ? 'Войти' : 'Зарегистрироваться' }}
         </button>
+        <p *ngIf="url === 'login'">Нет аккаунта? <a [routerLink]="['/registration']">Зарегестрируйтесь!</a></p>
     </form>
-</div>
+</section>

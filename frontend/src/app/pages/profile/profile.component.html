@@ -1,1 +1,52 @@
-<p>profile works!</p>
+<app-header></app-header>
+<section class="profile" (click)="hideModal()">
+  <div class="container">
+    <div class="wrapp">
+      <app-nav-profile></app-nav-profile>
+      <div class="content">
+        <div class="content__header">
+          <div class="content__header__menu">
+            <div class="content__header__menu__wrapp-image">
+              <img
+                class="content__header__menu__wrapp-image__image"
+                [src]="avatar"
+              />
+            </div>
+  
+            <div class="content__header__menu__info">
+              <h1 class="content__header__menu__info__heading">
+                {{ user.name }} {{ user.surname }}
+              </h1>
+            </div>
+  
+            <a [routerLink]="['/edit']" class="content__header__menu__link"
+              >Редактировать профиль</a
+            >
+          </div>
+        </div>
+        
+  
+        <div class="content__chats" (click)="onContentChatsClick($event)">
+          <button class="content__chats__create-btn" (click)="showModal($event)">Создать групповой чат</button>
+          <div *ngIf="isModal" (click)="$event.stopPropagation()">
+            <app-chat-modal></app-chat-modal>
+          </div>
+  
+          <ul class="content__chats__list">
+            @for (item of chats; track item.id) {
+              <li class="content__chats__list__item">
+                <p class="content__chats__list__item__name">{{item.name}}</p>
+                <div *ngIf="item.messages">
+                  @for(message of item.messages; track message.id) {
+                    <p class="content__chats__list__item__message">{{message.text}}</p>
+                  }
+                </div>
+                
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

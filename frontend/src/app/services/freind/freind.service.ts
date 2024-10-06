@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FreindService {
 
-  constructor(http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 // accepted", "declined"
 
   createRequest() {
@@ -14,13 +15,13 @@ export class FreindService {
   }
 
  
-  getRequestByFreindId() {
-      
+  getRequestMe(id: number) {
+      this.http.get(`${environment.apiUrl}/freind/request/${id}`)
   }
 
 
-  getRequestByUserId() {
-
+  getMyRequest(id: number) {
+    this.http.get(`${environment.apiUrl}/freind/request/my/${id}`)
   }
 
 

@@ -26,13 +26,13 @@ export class FreindService {
         return request;
     }
 
-    async getRequestByFreindId(freindId: number) {
-        const requests = await this.freindRequestRepository.findAll({where: {freindId}})
+    async getRequestByFreindId(userId: number) {
+        const requests = await this.freindRequestRepository.findAll({where: {freindId: userId}})
         return requests;
     }
 
     async getRequestByUserId(userId: number) {
-        const request = await this.freindRequestRepository.findAll({where: {userId}})
+        const request = await this.freindRequestRepository.findAll({where: {userId: userId}})
         return request;
     }
 

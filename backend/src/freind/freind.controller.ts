@@ -23,14 +23,14 @@ export class FreindController {
 
     @ApiOperation({summary: 'Получить заявки пользователя'})
     @ApiResponse({status: 200, type: [FreindRequest]})
-    @Get('request/:freind') 
-    getRequestByFreindId(@Param('freind') freindId: number) {
-        return this.freindService.getRequestByFreindId(freindId)
+    @Get('request/:id') 
+    getRequestByFreindId(@Param('id') userId: number) {
+        return this.freindService.getRequestByFreindId(userId)
     }
 
     @ApiOperation({summary: 'Получить отправленные заявки'})
     @ApiResponse({status: 200, type: [FreindRequest]})
-    @Get('request/:id') 
+    @Get('request/my/:id') 
     getRequestByUserId(@Param('id') userId: number) {
         return this.freindService.getRequestByUserId(userId);
     }

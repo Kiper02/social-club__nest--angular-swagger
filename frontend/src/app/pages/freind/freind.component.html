@@ -5,7 +5,55 @@
             <app-nav-profile></app-nav-profile>
             <div class="content">
                 <div class="content__header">
-                    <h1>Block</h1>
+                    <input class="content__header__field" placeholder="Найти друзей"/>
+                </div>
+
+
+                <div class="content__freind" [formGroup]="form">
+                    <form class="content__freind__form">
+                        <select name="select" class="content__freind__form__switch" (click)="onChange($event)">
+                            <option class="content__freind__form__switch__item" value="value1">Все пользователи</option>
+                            <option class="content__freind___form_switch__item" value="value2" selected>Друзья</option>
+                        </select>
+                    </form>
+
+                    <ul class="content__freind__list" *ngIf="freind">
+                        <li class="content__freind__list__item"  *ngFor="let freind of freinds">
+                            <div class="content__freind__list__item__wrapp-img">
+                                <img class="content__freind__list__item__img" [src]="apiUrl + '/' + freind.avatar"/>
+                            </div>
+
+
+                            <div class="content__freind__list__item__wrapp-name">
+                                <p class="content__freind__list__item__name">{{freind.surname}} {{freind.name}}</p>
+                                <p class="content__freind__list__item__link" (click)="openModal(freind)">Написать сообщение</p>
+                                <app-message-modal *ngIf="messageModal" [freind]="selectedFreind"></app-message-modal>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="content__freind__list" *ngIf="!freind">
+                        <li class="content__freind__list__item" *ngFor="let user of users">
+                            <div class="content__freind__list__item__wrapp-img">
+                                <img class="content__freind__list__item__img" [src]="apiUrl + '/' + user.avatar"/>
+                            </div>
+
+                            <div class="content__freind__list__item__wrapp-name">
+                                <p class="content__freind__list__item__name">{{user.surname}} {{user.name}}</p>
+                                <ng-container *ngIf="user.receivedFreindRequests.length > 0; else emptyBlock">
+                                    <ng-container *ngFor="let received of user.receivedFreindRequests">
+                                        <p *ngIf="received.userId === id" class="content__freind__list__item__request" (click)="createRequestFreind(user.id)">Запрос отправлен</p>
+                                        <ng-template #elseBlock>
+                                        <p class="content__freind__list__item__link" (click)="createRequestFreind(user.id)">Добавить в друзья</p>
+                                        </ng-template>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-template #emptyBlock>
+                                <p class="content__freind__list__item__link" (click)="createRequestFreind(user.id)">Добавить в друзья</p>
+                                </ng-template>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

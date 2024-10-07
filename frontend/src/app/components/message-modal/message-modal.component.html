@@ -1,0 +1,15 @@
+<div class="modal" *ngIf="freind">
+    <p class="modal__heading">Новое сообщение</p>
+
+    <div class="modal__profile">
+        <div class="modal__profile__wrapp-img">
+            <img class="modal__profile__wrapp-img__img" [src]="apiImageUrl + '/' + freind.avatar"/>
+        </div>
+        <p class="modal__profile__contact">{{freind.name}} {{freind.surname}}</p>
+    </div>
+
+    <textarea class="modal__input" ></textarea>
+    <div class="modal__wrapp-btn">
+        <button class="modal__wrapp-btn__btn">Отправить</button>
+    </div>
+</div>

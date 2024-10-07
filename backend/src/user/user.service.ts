@@ -8,6 +8,8 @@ import { join } from 'path';
 import * as fs from 'fs';
 import * as Multer from 'multer';
 import { ChangeAvatarDto } from './dto/change-avatar-dto';
+import { Freind } from 'src/freind/freind.model';
+import { FreindRequest } from 'src/freind/freind-request.model';
 
 @Injectable()
 export class UserService {
@@ -42,7 +44,21 @@ export class UserService {
   }
 
   async getUserAll() {
-    const users = await this.userRepository.findAll({ include: { all: true } });
+    const users = await this.userRepository.findAll({
+      include: [
+        {
+          model: Freind,
+        },
+        {
+          model: FreindRequest,
+          as: 'sentFreindRequests' // Получаем отправленные заявки
+        },
+        {
+          model: FreindRequest,
+          as: 'receivedFreindRequests' // Получаем полученные заявки
+        },
+      ],
+    });
     return users;
   }
 

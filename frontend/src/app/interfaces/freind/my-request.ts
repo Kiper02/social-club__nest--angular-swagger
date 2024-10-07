@@ -3,6 +3,7 @@ export interface IMyRequest {
   freindId: number;
   status: string;
   userId: number;
+  recipientId: number;
   createdAt: string;
   updatedAt: string;
 }

@@ -48,6 +48,9 @@ export class User extends Model<User> {
     @HasMany(() => Freind)
     freinds: Freind[];
 
-    @HasMany(() => FreindRequest)
-    freindRequests: FreindRequest[]
+    @HasMany(() => FreindRequest, { foreignKey: 'userId' })
+    sentFreindRequests: FreindRequest[]; 
+
+    @HasMany(() => FreindRequest, { foreignKey: 'recipientId' })
+    receivedFreindRequests: FreindRequest[];
 }

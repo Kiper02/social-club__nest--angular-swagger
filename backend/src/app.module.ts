@@ -22,10 +22,11 @@ import { Message } from './message/message.model';
 import { FreindModule } from './freind/freind.module';
 import { Freind } from './freind/freind.model';
 import { FreindRequest } from './freind/freind-request.model';
+import { SocketService } from './socket/socket.service';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, FileService],
+  providers: [AppService, FileService, SocketService],
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',

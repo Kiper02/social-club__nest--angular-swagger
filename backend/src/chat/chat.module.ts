@@ -11,7 +11,7 @@ import { Message } from 'src/message/message.model';
   controllers: [ChatController],
   providers: [ChatService],
   imports: [
-    SequelizeModule.forFeature([Chat, User, ChatParticipants, Message])
-  ]
+    SequelizeModule.forFeature([Chat, User, ChatParticipants, Message]),
+  ],
 })
 export class ChatModule {}

@@ -13,7 +13,7 @@ import { FileModule } from 'src/file/file.module';
   providers: [MessageService],
   imports: [
     SequelizeModule.forFeature([Message, Chat, File, User]),
-    FileModule
+    FileModule,
   ],
 })
 export class MessageModule {}

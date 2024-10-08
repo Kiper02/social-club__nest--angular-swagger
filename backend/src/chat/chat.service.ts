@@ -34,54 +34,30 @@ export class ChatService {
     return chat;
   }
 
-  async getChatsUser (id: number) {
+  async getChatsUser(id: number) {
     let chats = await this.chatRepository.findAll({
-        include: [
+      include: [
+        {
+          model: User,
+          where: { id },
+          through: { attributes: [] },
+          required: true,
+          include: [
             {
-                model: User,
-                where: { id }, // Находим чаты, в которых пользователь является участником
-                through: { attributes: [] }, // Убираем лишние атрибуты из промежуточной таблицы ChatParticipants
-                required: true,
-                include: [
-                    {
-                        model: Freind,
-                        as: 'freinds',
-                    },
-                ],
+              model: Freind,
+              as: 'freinds',
             },
-            {
-                model: Message,
-                required: false,
-                where: { id: { [Op.col]: 'Chat.lastMessageId' } },
-            },
-        ],
+          ],
+        },
+        {
+          model: Message,
+          required: false,
+          where: { id: { [Op.col]: 'Chat.lastMessageId' } },
+        },
+      ],
     });
     return chats;
-}
-
-
-  // async getChatsUser(id: number) {
-  //   let chats = await this.chatRepository.findAll({
-  //     // where: { userId: id },
-  //     include: [
-  //       {
-  //         model: User,
-  //         where: { id }, // Находим чаты, в которых пользователь является участником
-  //         through: { attributes: [] }, // Убираем лишние атрибуты из промежуточной таблицы ChatParticipants
-  //         required: true,
-  //       },
-  //       {
-  //         model: Message,
-  //         required: false,
-  //         where: { id: { [Op.col]: 'Chat.lastMessageId' } },
-  //       },
-  //       {
-  //         model: Freind
-  //       }
-  //     ],
-  //   });
-  //   return chats;
-  // }
+  }
 
   async removeChat(removeChatDto: RemoveChatDto) {
     const chat = await this.chatRepository.findOne({
@@ -149,14 +125,16 @@ export class ChatService {
   }
 
   async getAllChatParticipantsByUser(userId: number) {
-    const chatParticipants = await this.chatParticipantsRepository.findAll({where: { userId }});
+    const chatParticipants = await this.chatParticipantsRepository.findAll({
+      where: { userId },
+    });
     return chatParticipants;
   }
 
   async getAllChatParticipants(chatId: number) {
     const participants = await this.chatParticipantsRepository.findAll({
       where: { chatId },
-      include: [{ model: User }]
+      include: [{ model: User }],
     });
     return participants;
   }

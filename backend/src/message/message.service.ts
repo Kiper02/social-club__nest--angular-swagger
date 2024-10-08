@@ -24,16 +24,16 @@ export class MessageService {
       where: { id: createMessageDto.chatId },
     });
     await chat.update({ lastMessageId: message.id });
-    const messageWithUser  = await this.messageRepository.findOne({
-        where: { id: message.id },
-        include: [
-          {
-            model: User,
-            as: 'user',
-            required: true,
-          },
-        ],
-      });
+    const messageWithUser = await this.messageRepository.findOne({
+      where: { id: message.id },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          required: true,
+        },
+      ],
+    });
     return messageWithUser;
   }
 
@@ -47,8 +47,8 @@ export class MessageService {
           required: true,
         },
         {
-            model: File
-        }
+          model: File,
+        },
       ],
     });
     return messages;

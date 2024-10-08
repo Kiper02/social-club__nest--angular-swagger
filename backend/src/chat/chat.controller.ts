@@ -58,7 +58,6 @@ export class ChatController {
     @UsePipes(ValidationPipe)
     @Get('participants/:id')
     getAllChatParticipantsByUser(@Param('id') userId: number) {
-        console.log(`=====`);
         return this.chatService.getAllChatParticipantsByUser(userId);
     }
 

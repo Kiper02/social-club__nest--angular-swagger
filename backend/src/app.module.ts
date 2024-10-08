@@ -41,7 +41,6 @@ import { FreindRequest } from './freind/freind-request.model';
       database: process.env.DB_NAME,
       models: [User, Role, UserRole, Chat, ChatParticipants, File, Message, Freind, FreindRequest],
       autoLoadModels: true,
-      // sync: {force: true}
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static')

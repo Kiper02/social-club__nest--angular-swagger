@@ -7,11 +7,9 @@ import { FileController } from './file.controller';
 import { Chat } from 'src/chat/chat.model';
 
 @Module({
-    providers: [FileService],
-    exports: [FileService],
-    imports: [
-        SequelizeModule.forFeature([File, Message, Chat])
-    ],
-    controllers: [FileController]
+  providers: [FileService],
+  exports: [FileService],
+  imports: [SequelizeModule.forFeature([File, Message, Chat])],
+  controllers: [FileController],
 })
 export class FileModule {}

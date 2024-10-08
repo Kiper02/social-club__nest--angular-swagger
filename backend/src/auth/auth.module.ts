@@ -18,7 +18,7 @@ import { UserModule } from 'src/user/user.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-    UserModule
-  ]
+    UserModule,
+  ],
 })
 export class AuthModule {}

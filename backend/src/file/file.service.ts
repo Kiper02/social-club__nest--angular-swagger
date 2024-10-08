@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException, UploadedFile } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UploadedFile,
+} from '@nestjs/common';
 import * as uuid from 'uuid';
 import * as multer from 'multer';
 import * as path from 'path';
@@ -24,7 +28,7 @@ export class FileService {
       fs.writeFileSync(path.join(filePath, fileName), file.buffer);
       return fileName;
     } catch (error) {
-        throw new InternalServerErrorException('Ошибка при записи файла')
+      throw new InternalServerErrorException('Ошибка при записи файла');
     }
   }
 }

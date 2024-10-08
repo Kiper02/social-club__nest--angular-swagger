@@ -7,7 +7,6 @@ import { EFileType, FileService } from 'src/file/file.service';
 import { join } from 'path';
 import * as fs from 'fs';
 import * as Multer from 'multer';
-import { ChangeAvatarDto } from './dto/change-avatar-dto';
 import { Freind } from 'src/freind/freind.model';
 import { FreindRequest } from 'src/freind/freind-request.model';
 
@@ -51,11 +50,11 @@ export class UserService {
         },
         {
           model: FreindRequest,
-          as: 'sentFreindRequests' // Получаем отправленные заявки
+          as: 'sentFreindRequests',
         },
         {
           model: FreindRequest,
-          as: 'receivedFreindRequests' // Получаем полученные заявки
+          as: 'receivedFreindRequests',
         },
       ],
     });
@@ -75,9 +74,7 @@ export class UserService {
       { avatar: fileName },
       { where: { id: user.id } },
     );
-    const updatedUser = await this.userRepository.findByPk(
-      userId,
-    );
+    const updatedUser = await this.userRepository.findByPk(userId);
     return updatedUser;
   }
 }

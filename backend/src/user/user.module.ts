@@ -16,12 +16,18 @@ import { Freind } from 'src/freind/freind.model';
   controllers: [UserController],
   providers: [UserService],
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRole, Chat, ChatParticipants, FreindRequest, Freind]),
+    SequelizeModule.forFeature([
+      User,
+      Role,
+      UserRole,
+      Chat,
+      ChatParticipants,
+      FreindRequest,
+      Freind,
+    ]),
     RoleModule,
-    FileModule
+    FileModule,
   ],
-  exports: [
-    UserService
-  ]
+  exports: [UserService],
 })
 export class UserModule {}

@@ -1,10 +1,48 @@
 .messager {
+    position: relative;
     width: 100vw;
     height: 100vh;
     padding: 10px;
 
     background-color: #141414;
     font-family: "Roboto", sans-serif;
+}
+
+.messeger__btn {
+    position: absolute;
+    right: 10%;
+    top: 20%;
+
+    padding: 8px 13px;
+
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+
+    border-radius: 7px;
+    border: none;
+    color: #000;
+    background-color: #5ce042;
+    cursor: pointer;
+
+}
+
+.messeger__btn_check {
+    position: absolute;
+    right: 10%;
+    top: 25%;
+
+    padding: 8px 13px;
+
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+
+    border-radius: 7px;
+    border: none;
+    color: #000;
+    background-color: #4279e0;
+    cursor: pointer;
 }
 
 .wrapp {

@@ -1,0 +1,28 @@
+<app-header></app-header>
+<section class="request">
+    <div class="container">
+        <div class="wrapp">
+            <app-nav-profile></app-nav-profile>
+            <div class="content">
+                <ul class="content__list">
+                    <li class="content__list__item" *ngFor="let request of requests">
+                        <div class="content__list__item__user" *ngFor="let user of users">
+                            @if(request.userId === user.id) {
+                                <div class="content__list__item__user--container">
+                                    <div class="content__list__item__user__wrapp-img">
+                                        <img class="content__list__item__user__wrapp-img__image" [src]="apiImageUrl + '/' + user.avatar" />
+                                    </div>
+    
+                                    <p class="content__list__item__user__naming">
+                                        {{user.surname}} {{user.name}}
+                                    </p>
+                                </div>
+                                <button class="content__kist__item__user__btn" (click)="acceptRequest(request.id, request.userId, request)">Принять</button>
+                            }
+                        </div>
+                      </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

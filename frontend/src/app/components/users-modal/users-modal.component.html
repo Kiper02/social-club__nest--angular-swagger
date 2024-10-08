@@ -1,0 +1,15 @@
+<div class="modal">
+  <h3 class="modal__heading">Добавить друзей в чат</h3>
+  <ul class="list">
+    <li class="list__item" *ngFor="let freind of freinds" (click)="addUser(freind)">
+      <div class="list__item__wrapp-img">
+        <img
+          class="list__item__wrapp-img__img"
+          [src]="apiImageUrl + '/' + freind.avatar"
+        />
+      </div>
+
+      <p class="list__item__name">{{ freind.surname }} {{ freind.name }}</p>
+    </li>
+  </ul>
+</div>

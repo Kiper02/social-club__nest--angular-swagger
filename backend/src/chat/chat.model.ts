@@ -31,7 +31,7 @@ export class Chat extends Model<Chat> {
     lastMessageId: number
 
     @BelongsToMany(() => User, () => ChatParticipants)
-    users: [User]
+    users: User[]
 
     @HasMany(() => File)
     files: File[]

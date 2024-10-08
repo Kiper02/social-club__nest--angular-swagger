@@ -89,6 +89,8 @@ export class FreindComponent implements OnInit {
     this.freindService
       .getFreinds(this.id)
       .subscribe((freinds: IResponseFreind[]) => {
+        console.log(freinds);
+        console.log(this.id);
         freinds = freinds.filter((freind) => freind.id !== this.id);
         this.freinds = freinds;
       });

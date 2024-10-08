@@ -8,6 +8,7 @@ import { Roles } from 'src/guards/role/role.decorator';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './user.model';
 import { ValidationPipe } from 'src/pipes/validation/validation.pipe';
+import * as multer from 'multer'
 
 @ApiTags('Пользователи')
 @Controller('user')
@@ -42,11 +43,18 @@ export class UserController {
 
   @ApiOperation({summary: 'Изменить аватарку'})
   @ApiResponse({status: 200, type: User})
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(ValidationPipe)
   @Put('avatar')
-  avatarEdit(@Body() changeAvatarDto: ChangeAvatarDto, @UploadedFile() file) {
-    return this.userService.avatarEdit(changeAvatarDto, file);
+  avatarEdit(@Body() body: any, @UploadedFile() file: multer.File) {
+    const userId = body.userId;
+    // const chatId = body.chatId;
+    console.log(userId);
+
+    // console.log(file);
+;
+    console.log(`work`);
+    return this.userService.avatarEdit(userId, file);
   }
 }

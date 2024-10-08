@@ -1,5 +1,11 @@
 <app-header></app-header>
-<section class="messager">
+<section class="messager" (click)="hidenUsersModal(); hidenParticipantModal()">
+    @if(isGroupChat) {
+        <button class="messeger__btn" (click)="showUsersModal($event)">Добавить в чат</button>
+        <app-users-modal *ngIf="isUserModal" (click)="$event.stopPropagation()"></app-users-modal>
+        <button class="messeger__btn_check" (click)="showParticipantModal($event)">Посмотреть участников</button>
+        <app-participant-modal *ngIf="isParticipantModal" (click)="$event.stopPropagation()"></app-participant-modal>
+    }
     <div class="container">
         <div class="wrapp">
             <app-nav-profile></app-nav-profile>

@@ -134,6 +134,8 @@
     margin-top: 20px;
     display: flex;
     flex-direction: column;
+
+    overflow-y: auto;
 }
 
 .content__chats__list__item {
@@ -181,4 +183,33 @@
     font-size: 15px;
     color: #d3d5d8;
 
+}
+
+
+.content__chat__list__item--wrapp {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+
+    font-family: "Roboto", sans-serif;
+}
+
+.content__chat__list__item-wrapp-img {
+    width: 40px;
+    height: 40px;
+}
+
+.content__chat__list__item-wrapp-img__image {
+    width: 100%;
+
+    border-radius: 50%;
+}
+
+.content__chat__list__item__naming {
+    color: rgb(97, 97, 241);
+    cursor: pointer;
+    
+    font-size: 14px;
+    font-weight: bold;
 }

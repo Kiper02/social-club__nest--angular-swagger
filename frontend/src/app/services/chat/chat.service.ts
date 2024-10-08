@@ -4,6 +4,9 @@ import { IChat } from '../../interfaces/chat/chat';
 import { environment } from '../../../environments/environment';
 import { IResponseChat } from '../../interfaces/chat/response-chat';
 import { BehaviorSubject } from 'rxjs';
+import { IOneChat } from '../../interfaces/chat/one-chat';
+import { IAddUser } from '../../interfaces/chat/add-user';
+import { IResponseChatParticipant, IResponseParticipant } from '../../interfaces/chat/response-participant';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +26,29 @@ export class ChatService {
     })
   }
 
-  getOne() {
-
+  getOne(id: number) {
+    return this.http.get<IOneChat>(`${environment.apiUrl}/chat/one/${id}`)
   }
 
   getAllbyUserId(id: number) {
     return this.http.get<IResponseChat[]>(`${environment.apiUrl}/chat/${id}`).subscribe((chats: IResponseChat[]) => {
       this.chatsSubject.next(chats);
     })
+  }
+
+  addUserInChat(dto: IAddUser) {
+    return this.http.put(`${environment.apiUrl}/chat`, dto)
+  }
+
+  getAllChatParticipantsByUser(userId: number) {
+    return this.http.get<IResponseParticipant[]>(`${environment.apiUrl}/chat/participants/${userId}`);
+  }
+
+  getChatsParticipant(chatId: number) {
+    return this.http.get<IResponseChatParticipant[]>(`${environment.apiUrl}/chat/participants/check/${chatId}`)
+  }
+
+  createChatFreind(dto: IChat) {
+    return this.http.post<IResponseChat>(`${environment.apiUrl}/chat`, dto)
   }
 }

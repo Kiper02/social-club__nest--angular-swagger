@@ -1,4 +1,4 @@
-import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "src/user/user.model";
 import { Chat } from "./chat.model";
 
@@ -16,4 +16,11 @@ export class ChatParticipants extends Model<ChatParticipants> {
     @ForeignKey(() => Chat)
     @Column({type: DataType.INTEGER, allowNull: false})
     chatId: number;
+
+
+    @BelongsTo(() => User)
+    user: User;
+
+    @BelongsTo(() => Chat)
+    chat: Chat;
 }

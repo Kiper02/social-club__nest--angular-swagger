@@ -33,9 +33,11 @@ export class AuthService {
   }
 
   login(dto: ILogin) {
+    console.log(dto);
     this.http
       .post<IToken>(`${environment.apiUrl}/auth/login`, dto)
       .subscribe((data: IToken) => {
+        console.log('asd');
         localStorage.setItem('token', data.token)
         this.isAuth = true;
         this.route.navigate(['/profile'])

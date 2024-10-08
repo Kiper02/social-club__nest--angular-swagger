@@ -8,8 +8,8 @@
         <p class="modal__profile__contact">{{freind.name}} {{freind.surname}}</p>
     </div>
 
-    <textarea class="modal__input" ></textarea>
+    <textarea class="modal__input" [formControl]="textControl" required></textarea>
     <div class="modal__wrapp-btn">
-        <button class="modal__wrapp-btn__btn">Отправить</button>
+        <button class="modal__wrapp-btn__btn" (click)="createMessage()">Отправить</button>
     </div>
 </div>

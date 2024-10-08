@@ -52,4 +52,8 @@ export class MessageService {
       return null;
     }
   }
+
+  addMessageInChat(dto: ICreateMessage) {
+    return this.http.post<IResponseMessage>(`${environment.apiUrl}/message`, dto)
+  }
 }

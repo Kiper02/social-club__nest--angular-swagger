@@ -1,0 +1,99 @@
+.request {
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+
+    background-color: #141414;
+    font-family: "Roboto", sans-serif;
+}
+
+.wrapp {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+}
+
+.content {
+    margin: 10px;
+    padding: 10px;
+
+    width: 100%;
+    height: 860px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+
+    background-color: #222222;
+    border: 1px solid #363738;
+    border-radius: 10px;
+
+    overflow-y: auto;
+}
+
+.content__list {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.content__list__item {
+    padding: 8px;
+    list-style-type: none;
+    transition: all 0.2s ease-in;
+}
+
+.content__list__item:hover {
+    background-color: #363738;
+}
+
+.content__list__item__user {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   
+}
+
+.content__list__item__user--container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.content__list__item__user__wrapp-img {
+    width: 50px;
+    height: 50px;
+}
+
+.content__list__item__user__wrapp-img__image {
+    width: 100%;
+
+    border-radius: 50%;
+}
+
+.content__list__item__user__naming {
+
+    font-weight: bold;
+    font-size: 13px;
+    
+    color: #71aaeb;
+}
+
+.content__kist__item__user__btn {
+    padding: 8px 13px;
+
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+
+    border-radius: 7px;
+    border: none;
+    color: #000;
+    background-color: #5ce042;
+    cursor: pointer;
+}

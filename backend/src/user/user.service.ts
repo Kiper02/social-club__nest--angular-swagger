@@ -62,8 +62,8 @@ export class UserService {
     return users;
   }
 
-  async avatarEdit(changeAvatarDto: ChangeAvatarDto, file: Multer.File) {
-    const user = await this.userRepository.findByPk(changeAvatarDto.userId);
+  async avatarEdit(userId: number, file: Multer.File) {
+    const user = await this.userRepository.findByPk(userId);
     if (!user) {
       throw new HttpException(
         'Пользователь с таким идентификатором не найден',
@@ -76,7 +76,7 @@ export class UserService {
       { where: { id: user.id } },
     );
     const updatedUser = await this.userRepository.findByPk(
-      changeAvatarDto.userId,
+      userId,
     );
     return updatedUser;
   }

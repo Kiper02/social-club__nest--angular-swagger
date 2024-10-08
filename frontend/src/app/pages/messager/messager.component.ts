@@ -10,6 +10,10 @@ import { ICreateMessage } from '../../interfaces/message/create-message';
 import { jwtDecode } from 'jwt-decode';
 import { IToken } from '../../interfaces/profile/token';
 import { environment } from '../../../environments/environment';
+import { ChatService } from '../../services/chat/chat.service';
+import { IOneChat } from '../../interfaces/chat/one-chat';
+import { UsersModalComponent } from '../../components/users-modal/users-modal.component';
+import { ParticipantModalComponent } from '../../components/participant-modal/participant-modal.component';
 
 @Component({
   selector: 'app-messager',
@@ -19,6 +23,8 @@ import { environment } from '../../../environments/environment';
     NavProfileComponent,
     CommonModule,
     ReactiveFormsModule,
+    UsersModalComponent,
+    ParticipantModalComponent
   ],
   templateUrl: './messager.component.html',
   styleUrl: './messager.component.scss',
@@ -33,12 +39,16 @@ export class MessagerComponent implements OnInit {
   isClip: boolean = false;
   messageId: number = 0;
   file: any;
+  isGroupChat: boolean = false;
+  isUserModal: boolean = false;
+  isParticipantModal: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
     private appRef: ApplicationRef,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private chatService: ChatService
   ) {
     this.messageControl = new FormControl('');
   }
@@ -47,6 +57,8 @@ export class MessagerComponent implements OnInit {
     this.chatId = this.route.snapshot.paramMap.get('id');
     if (this.chatId) {
       this.getMessages();
+      this.checkIsGroup()
+      this.getChat()
     }
 
     const token = localStorage.getItem('token');
@@ -56,8 +68,13 @@ export class MessagerComponent implements OnInit {
     }
   }
 
+  getChat() {
+    this.chatService.getOne(Number(this.chatId)).subscribe((chat: IOneChat) => {
+       this.isGroupChat = chat.isGroup;
+    })
+  }
+
   getMessages() {
-    console.log(this.chatId);
     this.messageService.getMessages(this.chatId);
     this.messageService.getMessagesSubject().subscribe((messages: IResponseMessage[]) => {
       this.messages = messages;
@@ -94,4 +111,27 @@ export class MessagerComponent implements OnInit {
     }
   }
   
+  checkIsGroup() {
+    this.chatService.getOne(Number(this.chatId)).subscribe((chat: IOneChat) => {
+      this.isGroupChat = chat.isGroup;
+    })
+  }
+
+  showUsersModal(event: Event) {
+    event.stopPropagation();
+    this.isUserModal = true;
+  }
+
+  hidenUsersModal() {
+    this.isUserModal = false;
+  }
+
+  showParticipantModal(event: Event) {
+    event.stopPropagation();
+    this.isParticipantModal = true;
+  }
+
+  hidenParticipantModal() {
+    this.isParticipantModal = false;
+  }
 }

@@ -151,6 +151,12 @@
     cursor: pointer;
 }
 
+.content__chats__list__link {
+    
+    text-decoration: none;
+    color: #d3d5d8;
+}
+
 .content__chats__list__item:hover {
     background-color: #474646;
 }

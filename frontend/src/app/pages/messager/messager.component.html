@@ -1,0 +1,42 @@
+<app-header></app-header>
+<section class="messager">
+    <div class="container">
+        <div class="wrapp">
+            <app-nav-profile></app-nav-profile>
+            <div class="content">
+                <ul class="content__message__list">
+                    <li class="content__message__list__item" *ngFor="let message of messages">
+                        <div class="content__message__list__item__wrapp-content">
+                            <div class="content__message__list__additional">
+                                <div class="content__message__list__item__wrapp-content-img">
+                                    <img class="content__message__list__item__wrapp-content-img__image" [src]="apiImageUrl + '/' + message.user.avatar"/>
+                                </div>
+                                <div class="content__message__list__item__wrapp-content__info">
+                                    <p class="content__message__list__item__wrapp-content__info__contact">{{message.user.name}}</p>
+                                    <p class="content__message__list__item__wrapp-content__info__content">{{message.text}}</p>
+                                </div>
+                            </div>
+
+                            <div class="files" *ngFor="let file of message.files">
+                                <img [src]="apiImageUrl + '/' + file.file"/>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                
+                <div class="content__wrapp-field">  
+                    <div class="clip-wrapp" *ngIf="isClip">
+                        <img [src]="imageUrl" *ngIf="imageUrl" class="attached-image">
+                    </div>
+                    <label for="fileInput">
+                      <img class="content__wrapp-field__img" src="/assets/images/nav-profile/clip.svg"/>
+                    </label>
+                    <input type="file" id="fileInput" (change)="handleFileInput($event)">
+                    <textarea class="content__wrapp-field__field" placeholder="Напишите сообщение" [formControl]="messageControl" required></textarea>
+                    <button class="content__wrapp-field__btn" (click)="createMessage()">Отправить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

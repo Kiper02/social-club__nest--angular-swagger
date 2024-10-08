@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, UploadedFile, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -7,6 +7,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Message } from './message.model';
 import { File } from 'src/file/file.model';
 import { ValidationPipe } from 'src/pipes/validation/validation.pipe';
+import * as multer from 'multer'
+
+
 
 
 @ApiTags('Сообщения')
@@ -31,11 +34,15 @@ export class MessageController {
 
     @ApiOperation({summary: 'Прикрепить изображение к сообщению'})
     @ApiResponse({status: 200, type: File})
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @Post('file')
     @UseInterceptors(FileInterceptor('file'))
-    createFile(@Body() messageId: number, @UploadedFile() file) {
-        return this.messageService.createFile(messageId, file);
+    createFile(@UploadedFile() file: multer.File,  @Body() body: any) {
+        const messageId = body.messageId;
+        const chatId = body.chatId;
+        console.log(chatId);
+        console.log(file);
+        return this.messageService.createFile(messageId, chatId, file);
     }
 
     @ApiOperation({summary: 'Получить изображения конкретного сообщения'})

@@ -34,14 +34,13 @@
   
           <ul class="content__chats__list">
             @for (item of chats; track item.id) {
-              <li class="content__chats__list__item">
+              <li class="content__chats__list__item" [routerLink]="['/messager', item.id]">
                 <p class="content__chats__list__item__name">{{item.name}}</p>
                 <div *ngIf="item.messages">
                   @for(message of item.messages; track message.id) {
                     <p class="content__chats__list__item__message">{{message.text}}</p>
                   }
                 </div>
-                
               </li>
             }
           </ul>

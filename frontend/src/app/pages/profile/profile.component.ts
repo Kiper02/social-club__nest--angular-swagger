@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ApplicationRef, Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { NavProfileComponent } from '../../components/nav-profile/nav-profile.component';
 import { ProfileService } from '../../services/profile/profile.service';
@@ -10,7 +10,7 @@ import { ChatService } from '../../services/chat/chat.service';
 import { ChatModalComponent } from '../../components/chat-modal/chat-modal.component';
 import { CommonModule } from '@angular/common';
 import { IResponseChat } from '../../interfaces/chat/response-chat';
-import { HooksService } from '../../services/chat/hooks.service';
+import { MessagerComponent } from '../messager/messager.component';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +21,7 @@ import { HooksService } from '../../services/chat/hooks.service';
     RouterModule,
     ChatModalComponent,
     CommonModule,
+    MessagerComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -35,18 +36,17 @@ export class ProfileComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private chatService: ChatService,
-    private hooksService: HooksService
   ) {}
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken: IToken = jwtDecode(token);
       this.id = decodedToken.id;
+      console.log(this.id);
     }
     this.getAvatar();
     this.getUser();
     this.getChats();
-    this.hooksService.useConnectSocket();
   }
 
   getAvatar() {
@@ -80,12 +80,9 @@ export class ProfileComponent implements OnInit {
   }
 
   getChats() {
-    this.chatService
-      .getAllbyUserId(this.id)
-      .subscribe((data: IResponseChat[]) => {
-        this.chats = data;
-        console.log(`id - ${this.id}`);
-        console.log(data);
-      });
+    this.chatService.getAllbyUserId(this.id);
+    this.chatService.chats$.subscribe((chats: IResponseChat[]) => {
+      this.chats = chats;
+    });
   }
 }

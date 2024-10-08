@@ -32,4 +32,7 @@ export class Message extends Model<Message> {
 
     @BelongsTo(() => Chat)
     chat: Chat
+
+    @BelongsTo(() => User)
+    user: User;
 }

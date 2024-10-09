@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { IResponseMessage } from '../../interfaces/message/response-message';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from '../../services/message/message.service';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ICreateMessage } from '../../interfaces/message/create-message';
 import { jwtDecode } from 'jwt-decode';
 import { IToken } from '../../interfaces/profile/token';
@@ -14,6 +14,11 @@ import { ChatService } from '../../services/chat/chat.service';
 import { IOneChat } from '../../interfaces/chat/one-chat';
 import { UsersModalComponent } from '../../components/users-modal/users-modal.component';
 import { ParticipantModalComponent } from '../../components/participant-modal/participant-modal.component';
+import { WebSocketService } from '../../services/websocket/websocket.service';
+import { IResponseUser } from '../../interfaces/freind/response-user';
+import { ProfileService } from '../../services/profile/profile.service';
+import { IUser } from '../../interfaces/profile/user';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-messager',
@@ -42,15 +47,24 @@ export class MessagerComponent implements OnInit {
   isGroupChat: boolean = false;
   isUserModal: boolean = false;
   isParticipantModal: boolean = false;
+  private messageSubscription: Subscription | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
     private appRef: ApplicationRef,
     private cdRef: ChangeDetectorRef,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private socketService: WebSocketService,
+    private profileService: ProfileService
   ) {
-    this.messageControl = new FormControl('');
+    this.messageControl = new FormControl('', { validators: [Validators.required] });
+  }
+
+  ngOnDestroy(): void {
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
@@ -59,7 +73,14 @@ export class MessagerComponent implements OnInit {
       this.getMessages();
       this.checkIsGroup()
       this.getChat()
+      this.messageService.subscribeToMessages(this.chatId);
+      console.log(this.chatId);
     }
+    this.messageService.messages$.subscribe((messages: IResponseMessage[]) => {
+      this.messages = messages;
+
+
+    });
 
     const token = localStorage.getItem('token');
     if(token) {
@@ -77,18 +98,55 @@ export class MessagerComponent implements OnInit {
   getMessages() {
     this.messageService.getMessages(this.chatId);
     this.messageService.getMessagesSubject().subscribe((messages: IResponseMessage[]) => {
-      this.messages = messages;
+      messages.forEach((message) => {
+        this.messages.unshift(message);
+      });
       this.cdRef.markForCheck();
     })
   }
 
   createMessage() {
+    
+    if (this.messageControl.invalid) {
+      console.log(this.messageControl.invalid && this.messageControl.touched);
+      this.messageControl.markAsTouched();
+      // Trigger change detection explicitly
+      this.cdRef.detectChanges();
+      return; // Exit the function if the control is invalid
+    }
+  
     const dto: ICreateMessage = {
       text: this.messageControl.value,
       chatId: Number(this.chatId),
       userId: this.userId
-    }
+    };
+    console.log(dto);
     if(this.chatId) {
+      this.profileService.getCurrentUserInChat(this.userId).subscribe((user: IUser) => {
+        const message: IResponseMessage = {
+          id: dto.userId, // or some other valid id
+          chatId: Number(this.chatId),
+          userId: this.userId,
+          text: dto.text,
+          user: {
+            id: user.id,
+            surname: user.surname,
+            patronymic: user.patronymic,
+            password: user.password,
+            createdAt: user.createdAt,
+            email: user.email,
+            updatedAt: user.updatedAt,
+            name: user.name,
+            avatar: user.avatar,
+          },
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          files: [], // or some other valid files array
+          // add other required properties here
+        };
+        console.log(message);
+        this.messages.unshift(message); // добавляем сообщение в начало массива
+      })
       this.messageService.createMessage(dto, this.chatId, this.file);
       this.isClip = false
       this.messageControl.reset()
@@ -96,6 +154,55 @@ export class MessagerComponent implements OnInit {
       this.messageId = this.messageService.id;
     }
   }
+  
+  
+
+  // createMessage() {
+  //   const dto: ICreateMessage = {
+  //     text: this.messageControl.value,
+  //     chatId: Number(this.chatId),
+  //     userId: this.userId
+  //   }
+  //   console.log(dto);
+  //   if(this.chatId) {
+  //     this.profileService.getCurrentUserInChat(this.userId).subscribe((user: IUser) => {
+  //       const message: IResponseMessage = {
+  //         id: dto.userId, // or some other valid id
+  //         chatId: Number(this.chatId),
+  //         userId: this.userId,
+  //         text: dto.text,
+  //         user: {
+  //           id: user.id,
+  //           surname: user.surname,
+  //           patronymic: user.patronymic,
+  //           password: user.password,
+  //           createdAt: user.createdAt,
+  //           email: user.email,
+  //           updatedAt: user.updatedAt,
+  //           name: user.name,
+  //           avatar: user.avatar,
+  //         },
+  //         createdAt: user.createdAt,
+  //         updatedAt: user.updatedAt,
+  //         files: [], // or some other valid files array
+  //         // add other required properties here
+  //       };
+  //       console.log(message);
+        
+  //       this.socketMessage(message);
+  //       // if (this.file) {
+  //         //   this.socketService.sendFile(this.file);
+  //         // }
+  //         this.messages.unshift(message); // добавляем сообщение в начало массива
+          
+  //       })
+  //       this.messageService.createMessage(dto, this.chatId, this.file);
+  //     this.isClip = false
+  //     this.messageControl.reset()
+  //     this.appRef.tick();
+  //     this.messageId = this.messageService.id;
+  //   }
+  // }
 
   handleFileInput(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -133,5 +240,8 @@ export class MessagerComponent implements OnInit {
 
   hidenParticipantModal() {
     this.isParticipantModal = false;
+  }
+  socketMessage(message: any) {
+    this.socketService.sendMessage(message);
   }
 }

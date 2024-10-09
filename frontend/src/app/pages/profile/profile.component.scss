@@ -106,6 +106,8 @@
     border-radius: 15px 15px 10px 10px;
     background-color: #222222;
     color: #fff;
+
+    overflow-y: auto;
 }
 
 .content__chats__create-btn {
@@ -134,8 +136,6 @@
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-
-    overflow-y: auto;
 }
 
 .content__chats__list__item {
@@ -166,17 +166,6 @@
 .content__chats__list__item__name {
     width: 100px;
     font-weight: bold;
-}
-
-.content__chats__list__item__name::after {
-    position: absolute;
-    top: 0;
-    left: 10%;
-
-    content: "";
-    width: 2px;
-    height: 100%; 
-    background-color: #fff;
 }
 
 .content__chats__list__item__message {

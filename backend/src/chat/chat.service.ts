@@ -31,33 +31,51 @@ export class ChatService {
       );
     }
     const chat = await this.chatRepository.create(createChatDto);
+    await this.chatParticipantsRepository.create({
+      userId: createChatDto.userId,
+      chatId: chat.id,
+    });
     return chat;
   }
+  
 
-  async getChatsUser(id: number) {
-    let chats = await this.chatRepository.findAll({
-      include: [
-        {
-          model: User,
-          where: { id },
-          through: { attributes: [] },
-          required: true,
-          include: [
-            {
-              model: Freind,
-              as: 'freinds',
-            },
-          ],
-        },
-        {
-          model: Message,
-          required: false,
-          where: { id: { [Op.col]: 'Chat.lastMessageId' } },
-        },
-      ],
-    });
-    return chats;
-  }
+
+
+async getChatsUser(id: number) {
+  let chats = await this.chatRepository.findAll({
+    subQuery: false,
+    include: [
+      {
+        model: User,
+        where: { id },
+        // through: { attributes: [] },
+        // required: true,
+        include: [
+          {
+            model: Freind,
+            as: 'freinds',
+          },
+        ],
+      },
+      {
+        model: ChatParticipants,
+        include: [
+          {
+            model: User,
+            as: 'user',
+          },
+        ],
+      },
+      {
+        model: Message,
+        required: false,
+        where: { id: { [Op.col]: 'Chat.lastMessageId' } },
+      },
+    ],
+  });
+  return chats;
+}
+
 
   async removeChat(removeChatDto: RemoveChatDto) {
     const chat = await this.chatRepository.findOne({
@@ -76,48 +94,52 @@ export class ChatService {
     };
   }
 
-  async addUserInChat(addUserInChat: AddUserInChatDto) {
-    const user = await this.userRepository.findByPk(addUserInChat.userId);
+  async addUserInChat(addUserInChatDto: AddUserInChatDto) {
+    // Проверка существования пользователя
+    const user = await this.userRepository.findByPk(addUserInChatDto.userId);
     if (!user) {
-      throw new HttpException(
-        'Пользователя с таким id не существует',
-        HttpStatus.NOT_FOUND,
-      );
+        throw new HttpException(
+            'Пользователя с таким id не существует',
+            HttpStatus.NOT_FOUND,
+        );
     }
 
-    const chat = await this.chatRepository.findByPk(addUserInChat.chatId);
+    // Проверка существования чата
+    const chat = await this.chatRepository.findByPk(addUserInChatDto.chatId);
     if (!chat) {
-      throw new HttpException(
-        'Чата с таким id не существует',
-        HttpStatus.NOT_FOUND,
-      );
+        throw new HttpException(
+            'Чата с таким id не существует',
+            HttpStatus.NOT_FOUND,
+        );
     }
 
+    // Проверка, состоит ли пользователь в чате
     const isParticipant = await this.chatParticipantsRepository.findOne({
-      where: { userId: addUserInChat.userId, chatId: addUserInChat.chatId },
+        where: {
+            userId: addUserInChatDto.userId,
+            chatId: addUserInChatDto.chatId,
+        },
     });
-
-    console.log(isParticipant);
 
     if (isParticipant) {
-      throw new HttpException(
-        'Пользователь уже добавлен в этот чат',
-        HttpStatus.BAD_REQUEST,
-      );
+        throw new HttpException(
+            'Пользователь уже добавлен в этот чат',
+            HttpStatus.BAD_REQUEST,
+        );
     }
 
-    // Добавляем запись в таблицу chatParticipants
-    const participant = await this.chatParticipantsRepository.create({
-      userId: addUserInChat.userId,
-      chatId: addUserInChat.chatId,
+    // Добавляем нового участника в чат
+    await this.chatParticipantsRepository.create({
+        userId: addUserInChatDto.userId,
+        chatId: addUserInChatDto.chatId,
     });
-    // Проверяем добавление участника
-    console.log('Пользователь добавлен в чат:', participant);
+
     return {
-      statusCode: HttpStatus.OK,
-      message: 'Пользователь добавлен в чат',
+        statusCode: HttpStatus.OK,
+        message: 'Пользователь добавлен в чат',
     };
-  }
+}
+
 
   async getOneChat(id: number) {
     const chat = await this.chatRepository.findOne({ where: { id } });
@@ -137,5 +159,9 @@ export class ChatService {
       include: [{ model: User }],
     });
     return participants;
+  }
+
+  async getCommonChat(userId: number, freindId: number) {
+    const chat = this.chatRepository.findOne({where: {userId, }})
   }
 }

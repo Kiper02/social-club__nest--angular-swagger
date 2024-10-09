@@ -16,6 +16,7 @@ import { FreindService } from '../../services/freind/freind.service';
 import { IResponseFreind } from '../../interfaces/freind/response-freind';
 import { IResponseUser } from '../../interfaces/freind/response-user';
 import { EditModalComponent } from '../../components/edit-modal/edit-modal.component';
+import { WebSocketService } from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +28,7 @@ import { EditModalComponent } from '../../components/edit-modal/edit-modal.compo
     ChatModalComponent,
     CommonModule,
     MessagerComponent,
-    EditModalComponent
+    EditModalComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -38,16 +39,17 @@ export class ProfileComponent implements OnInit {
   user: Partial<IUser> = {};
   isModal: boolean;
   chats: IResponseChat[] = [];
-  img: string = environment.apiUrlImages
+  img: string = environment.apiUrlImages;
 
-  users: IResponseUser[] = []
+  users: IResponseUser[] = [];
 
   constructor(
     private profileService: ProfileService,
     private chatService: ChatService,
-    private freindService: FreindService
+    private freindService: FreindService,
+    private socketService: WebSocketService,
   ) {
-    this.isModal = this.profileService.isModal
+    this.isModal = this.profileService.isModal;
   }
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -59,6 +61,7 @@ export class ProfileComponent implements OnInit {
     this.getUser();
     this.getChats();
     this.getFreinds();
+    this.socketService.createConnection();
 
     this.profileService.getIsModalSubject().subscribe((isModal: boolean) => {
       this.isModal = isModal;
@@ -74,7 +77,7 @@ export class ProfileComponent implements OnInit {
   getFreinds() {
     this.freindService.getUsersAll().subscribe((data: IResponseUser[]) => {
       this.users = data;
-    })
+    });
   }
 
   getUser() {
@@ -88,19 +91,16 @@ export class ProfileComponent implements OnInit {
   }
 
   showModal(event: any) {
-    // this.isModal = true;
-    // event.stopPropagation(); // prevent propagation to parent element
     this.profileService.showModal(event);
   }
 
   hideModal() {
-    // this.isModal = false;
     this.profileService.hidenModal();
   }
 
   onContentChatsClick(event: any) {
     this.hideModal();
-    event.stopPropagation(); // prevent propagation to parent element
+    event.stopPropagation();
   }
 
   getChats() {
@@ -109,7 +109,7 @@ export class ProfileComponent implements OnInit {
       this.chats = chats;
     });
   }
- 
+
   getEditAvatar(event: Event) {
     const input = event.target as HTMLInputElement;
     const files = input.files;
@@ -117,9 +117,13 @@ export class ProfileComponent implements OnInit {
       const reader = new FileReader();
 
       reader.readAsDataURL(files[0]);
-      this.profileService.editAvatar(files[0], this.id).subscribe(data => {
+      this.profileService.editAvatar(files[0], this.id).subscribe((data) => {
         console.log(data);
-      })
+      });
     }
+  }
+
+  connectSocket(chatId: number) {
+    this.socketService.joinRoom(chatId);
   }
 }

@@ -39,7 +39,13 @@
                       <img class="content__wrapp-field__img" src="/assets/images/nav-profile/clip.svg"/>
                     </label>
                     <input type="file" id="fileInput" (change)="handleFileInput($event)">
-                    <textarea class="content__wrapp-field__field" placeholder="Напишите сообщение" [formControl]="messageControl" required></textarea>
+                    <textarea 
+                        class="content__wrapp-field__field" 
+                        placeholder="Напишите сообщение" 
+                        [formControl]="messageControl" 
+                        required
+                        [ngClass]="{'error-border': messageControl.invalid && messageControl.touched}" 
+                    ></textarea>
                     <button class="content__wrapp-field__btn" (click)="createMessage()">Отправить</button>
                 </div>
             </div>

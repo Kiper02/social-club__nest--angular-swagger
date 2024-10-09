@@ -43,12 +43,14 @@ export class FreindComponent implements OnInit {
   freinds: IResponseFreind[] = [];
   apiUrl: string = `${environment.apiUrlImages}`;
   selectedFreind: Partial<IResponseFreind> = {};
-  messageModal: boolean = false;
+  messageModal: boolean;
 
   constructor(
     private freindService: FreindService,
     private appRef: ApplicationRef,
-  ) {}
+  ) {
+    this.messageModal = freindService.isModal;
+  }
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -58,6 +60,10 @@ export class FreindComponent implements OnInit {
     }
     this.getMyRequest();
     this.getFreinds();
+
+    this.freindService.getIsModalSubject().subscribe((isModal: boolean) => {
+      this.messageModal = isModal;
+    });
   }
 
   getMyRequest() {
@@ -111,12 +117,14 @@ export class FreindComponent implements OnInit {
     });
   }
 
-  openModal(freind: IResponseFreind) {
+  openModal(freind: IResponseFreind, event: Event) {
     this.selectedFreind = freind;
-    this.messageModal = true;
+    this.freindService.showModal(event)
+    // this.messageModal = true;
   }
 
   closeModal() {
-    this.messageModal = false;
+    this.freindService.hidenModal()
+    // this.messageModal = false;
   }
 }

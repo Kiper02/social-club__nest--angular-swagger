@@ -29,12 +29,17 @@ export class FreindService {
     const checkIsFreind = await this.freindRepository.findOne({
       where: {
         [Op.or]: [
-          { userId: createRequestDto.userId, freindId: createRequestDto.freindId },
-          { userId: createRequestDto.freindId, freindId: createRequestDto.userId }
-        ]
-      }
-    })
-    
+          {
+            userId: createRequestDto.userId,
+            freindId: createRequestDto.freindId,
+          },
+          {
+            userId: createRequestDto.freindId,
+            freindId: createRequestDto.userId,
+          },
+        ],
+      },
+    });
 
     if (checkIsFreind) {
       throw new HttpException(
@@ -102,21 +107,43 @@ export class FreindService {
     const checkIsConflict = await this.freindRepository.findOne({
       where: {
         [Op.or]: [
-          { userId: acceptRequestDto.userId, freindId: acceptRequestDto.freindId },
-          { userId: acceptRequestDto.freindId, freindId: acceptRequestDto.userId }
-        ]
-      }
-    })
+          {
+            userId: acceptRequestDto.userId,
+            freindId: acceptRequestDto.freindId,
+          },
+          {
+            userId: acceptRequestDto.freindId,
+            freindId: acceptRequestDto.userId,
+          },
+        ],
+      },
+    });
 
-    if(checkIsConflict) {
-      throw new HttpException('Заявка на добавление в друзья уже создана', HttpStatus.CONFLICT);
+    if (checkIsConflict) {
+      throw new HttpException(
+        'Заявка на добавление в друзья уже создана',
+        HttpStatus.CONFLICT,
+      );
     }
 
     await this.freindRequestRepository.destroy({
       where: { id: acceptRequestDto.requestId },
     });
-    const freind = await this.freindRepository.create(acceptRequestDto);
-    return freind;
+
+    await this.freindRepository.bulkCreate([
+      {
+        userId: acceptRequestDto.userId,
+        freindId: acceptRequestDto.freindId,
+        status: 'accepted',
+      },
+      {
+        userId: acceptRequestDto.freindId,
+        freindId: acceptRequestDto.userId,
+        status: 'accepted',
+      },
+    ]);
+
+    return { message: 'Заявка на дружбу принята' };
   }
 
   async editRequest(getRequestDto: GetRequestDto) {

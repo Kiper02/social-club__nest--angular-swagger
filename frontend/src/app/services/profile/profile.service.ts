@@ -60,4 +60,8 @@ export class ProfileService {
       })
     );
   }
+
+  getCurrentUserInChat(id: number) {
+    return this.http.get<IUser>(`${environment.apiUrl}/user/${id}`)
+  }
 }

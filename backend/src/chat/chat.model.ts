@@ -50,4 +50,9 @@ export class Chat extends Model<Chat> {
 
   @HasMany(() => Message)
   messages: Message[];
+
+  @HasMany(() => ChatParticipants)
+  chatParticipants: ChatParticipants[];
 }
+
+

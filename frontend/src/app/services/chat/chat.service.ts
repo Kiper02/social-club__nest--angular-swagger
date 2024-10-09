@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { IChat } from '../../interfaces/chat/chat';
 import { environment } from '../../../environments/environment';
 import { IResponseChat } from '../../interfaces/chat/response-chat';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IOneChat } from '../../interfaces/chat/one-chat';
 import { IAddUser } from '../../interfaces/chat/add-user';
 import { IResponseChatParticipant, IResponseParticipant } from '../../interfaces/chat/response-participant';

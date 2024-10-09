@@ -27,4 +27,5 @@ export class ChatParticipants extends Model<ChatParticipants> {
 
   @BelongsTo(() => Chat)
   chat: Chat;
+  
 }

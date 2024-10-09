@@ -11,96 +11,111 @@ import { jwtDecode } from 'jwt-decode';
 import { IResponseChat } from '../../interfaces/chat/response-chat';
 import { IChat } from '../../interfaces/chat/chat';
 import { IAddUser } from '../../interfaces/chat/add-user';
+import { FreindService } from '../../services/freind/freind.service';
 
 @Component({
   selector: 'app-message-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './message-modal.component.html',
-  styleUrl: './message-modal.component.scss'
+  styleUrl: './message-modal.component.scss',
 })
-export class MessageModalComponent implements OnInit{
-  apiImageUrl: string = ''
-  textControl = new FormControl('')
+export class MessageModalComponent implements OnInit {
+  apiImageUrl: string = '';
+  textControl = new FormControl('');
   userId: number = 0;
   isHaveChat: boolean = false;
   chats: IResponseChat[] = [];
+  // isModal: boolean;
   // freindId: number = 0;
 
   @Input() freind: Partial<IResponseFreind> = {};
 
-  constructor(private messageService: MessageService, private chatService: ChatService) {
+  constructor(
+    private messageService: MessageService,
+    private chatService: ChatService,
+    private freindService: FreindService,
+  ) {
     this.apiImageUrl = environment.apiUrlImages;
   }
+
   ngOnInit(): void {
-    const token = localStorage.getItem('token')
-    if(token) {
-      const decodedToken: IToken = jwtDecode(token) 
-      this.userId = decodedToken.id
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken: IToken = jwtDecode(token);
+      this.userId = decodedToken.id;
       console.log(this.userId);
     }
+    this.getChat();
+    console.log(this.freind.id);
   }
 
   getChat() {
     this.chatService.getAllbyUserId(this.userId);
     this.chatService.chats$.subscribe((chats: IResponseChat[]) => {
       this.chats = chats;
-    })
+    });
   }
 
-  
   createMessage() {
-    const existingChat = this.chats.find(chat => {
+    this.freindService.hidenModal(); // Скрываем модалку
+    const existingChat = this.chats.find((chat) => {
+      if (chat.chatParticipants.length < 2) {
+        return false;
+      }
+      const participantIds = chat.chatParticipants.map(participant => participant.userId);
       return (
-        chat.isGroup === false &&
-        chat.users.find(user => user.id === this.userId) &&
-        chat.users.find(user => user.id === this.freind.id)
+        !chat.isGroup &&
+        participantIds.includes(this.userId) &&
+        participantIds.includes(Number(this.freind.id))
       );
     });
-  
+
+
     if (existingChat) {
+      console.log('Чата уже существует, отправим туда', existingChat);
       // Отправить сообщение в существующий чат
       const dto: ICreateMessage = {
         text: String(this.textControl.value),
         chatId: existingChat.id,
-        userId: this.userId
+        userId: this.userId,
       };
-      this.messageService.addMessageInChat(dto).subscribe(data => {
+      this.messageService.addMessageInChat(dto).subscribe((data) => {
         console.log(data);
       });
     } else {
+      console.log('Создался новый чат');
       const dto: IChat = {
         userId: this.userId,
         name: `${this.freind.name}`,
-        isGroup: false
+        isGroup: false,
       };
-  
-      this.chatService.createChatFreind(dto).subscribe((data: IResponseChat) => {
-        const chatId = data.id;
-        const addUserDto: IAddUser  = {
-          userId: this.userId,
-          chatId: chatId
-        };
-        this.chatService.addUserInChat(addUserDto).subscribe(() => {
-          const addUserDto: IAddUser  = {
+
+      // Создаем новый чат
+      this.chatService
+        .createChatFreind(dto)
+        .subscribe((data: IResponseChat) => {
+          const chatId = data.id;
+          const addUserDto: IAddUser = {
             userId: Number(this.freind.id),
-            chatId: chatId
+            chatId: chatId,
           };
+
+          // Добавляем второго пользователя в чат
           this.chatService.addUserInChat(addUserDto).subscribe(() => {
             // Отправить сообщение в новый чат
-            const dto: ICreateMessage = {
+            const messageDto: ICreateMessage = {
               text: String(this.textControl.value),
               chatId: chatId,
-              userId: this.userId
+              userId: this.userId,
             };
-            this.messageService.addMessageInChat(dto).subscribe(data => {
-              console.log(data);
-            });
+            this.messageService
+              .addMessageInChat(messageDto)
+              .subscribe((data) => {
+                console.log(data);
+              });
           });
         });
-      });
     }
   }
-  
 }
-

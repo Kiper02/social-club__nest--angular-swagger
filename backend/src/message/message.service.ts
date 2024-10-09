@@ -50,6 +50,7 @@ export class MessageService {
           model: File,
         },
       ],
+      order: [['createdAt', 'DESC']],
     });
     return messages;
   }

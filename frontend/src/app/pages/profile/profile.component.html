@@ -45,25 +45,26 @@
                   </div>
                 </li>
               }
+
+              
+
               @if(!item.isGroup) {
-                @for(user of users; track user.id) {
-                  @for(freind of user.freinds; track freind.id) {
-                    @if(user.id === freind.id) {
-                      <li class="content__chats__list__item" [routerLink]="['/messager', item.id]">
-                        <div class="content__chat__list__item--wrapp">
-                          <div class="content__chat__list__item-wrapp-img">
-                            <img class="content__chat__list__item-wrapp-img__image" [src]="img + '/' + user.avatar"/>
-                          </div>
-                          <p class="content__chat__list__item__naming">{{user.name}}</p>
+                @for(participant of item.chatParticipants; track participant.id) {
+                  @if(id !== participant.userId) {
+                    <li class="content__chats__list__item" [routerLink]="['/messager', item.id]" (click)="connectSocket(item.id)">
+                      <div class="content__chat__list__item--wrapp">
+                        <div class="content__chat__list__item-wrapp-img">
+                          <img class="content__chat__list__item-wrapp-img__image" [src]="img + '/' + participant.user.avatar"/>
                         </div>
-      
-                        <div *ngIf="item.messages">
-                          @for(message of item.messages; track message.id) {
-                            <p class="content__chats__list__item__message">{{message.text}}</p>
-                          }
-                        </div>
-                      </li>
-                    }
+                        <p class="content__chat__list__item__naming">{{participant.user.name}}</p>
+                      </div>
+            
+                      <div *ngIf="item.messages">
+                        @for(message of item.messages; track message.id) {
+                          <p class="content__chats__list__item__message">{{message.text}}</p>
+                        }
+                      </div>
+                    </li>
                   }
                 }
               }

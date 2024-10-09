@@ -5,14 +5,34 @@ import { IMyRequest } from '../../interfaces/freind/my-request';
 import { IResponseUser } from '../../interfaces/freind/response-user';
 import { IResponseFreind } from '../../interfaces/freind/response-freind';
 import { ICreateRequest } from '../../interfaces/freind/create-request';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FreindService {
 
+  private isModalSubject = new Subject<boolean>();
+  isModal: boolean = false;
+
   constructor(private http: HttpClient) { }
-// accepted", "declined"
+
+
+  showModal(event: Event) {
+    this.isModal = true;
+    event.stopPropagation();
+    this.isModalSubject.next(this.isModal);
+  }
+
+  hidenModal() {
+    this.isModal = false;
+    this.isModalSubject.next(this.isModal);
+  }
+
+  getIsModalSubject() {
+    return this.isModalSubject.asObservable();
+  }
+
 
   createRequest(dto: ICreateRequest) {
       return this.http.post<IMyRequest>(`${environment.apiUrl}/freind/request`, dto)

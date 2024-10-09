@@ -27,10 +27,12 @@ export class AuthService {
       );
     }
     const hashPassword = await bcrypt.hash(createUserDto.password, 4);
+    console.log(hashPassword);
     const user = await this.userService.create({
       ...createUserDto,
       password: hashPassword,
     });
+    console.log(user);
     const token = this.jwtGenerate(user);
     return token;
   }

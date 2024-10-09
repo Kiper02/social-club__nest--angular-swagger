@@ -1,5 +1,14 @@
 import { IUser } from "../profile/user";
 
+interface IChatParticipants {
+  id: number,
+  userId: number,
+  chatId: number,
+  createdAt: string,
+  updatedAt: string,
+  user: IUser
+}
+
 interface IMessage {
   id: number;
   text: string;
@@ -16,6 +25,7 @@ export interface IResponseChat {
   userId: number;
   createdAt: string;
   updatedAt: string;
+  chatParticipants: IChatParticipants[]
   users: IUser[]
   messages: IMessage[];
 }

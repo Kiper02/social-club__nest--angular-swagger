@@ -61,4 +61,8 @@ export class User extends Model<User> {
 
   @HasMany(() => FreindRequest, { foreignKey: 'recipientId' })
   receivedFreindRequests: FreindRequest[];
+
+  async addChat(chat: Chat) {
+    await this.$add('chats', chat);
+  }
 }

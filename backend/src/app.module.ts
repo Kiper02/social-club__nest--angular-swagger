@@ -22,10 +22,12 @@ import { Message } from './message/message.model';
 import { FreindModule } from './freind/freind.module';
 import { Freind } from './freind/freind.model';
 import { FreindRequest } from './freind/freind-request.model';
+import { AppGateway } from './app/app.gateway';
+import { SocketModule } from './app/socket.module';
 
 @Module({
   controllers: [AppController],
-  providers: [AppService, FileService],
+  providers: [AppService, FileService, AppGateway],
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
@@ -41,6 +43,8 @@ import { FreindRequest } from './freind/freind-request.model';
       database: process.env.DB_NAME,
       models: [User, Role, UserRole, Chat, ChatParticipants, File, Message, Freind, FreindRequest],
       autoLoadModels: true,
+      logging: false
+      // sync: {force: true}
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static')

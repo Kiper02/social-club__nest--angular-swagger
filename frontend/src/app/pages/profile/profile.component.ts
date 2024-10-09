@@ -1,4 +1,4 @@
-import { ApplicationRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { NavProfileComponent } from '../../components/nav-profile/nav-profile.component';
 import { ProfileService } from '../../services/profile/profile.service';
@@ -13,7 +13,6 @@ import { IResponseChat } from '../../interfaces/chat/response-chat';
 import { MessagerComponent } from '../messager/messager.component';
 import { environment } from '../../../environments/environment';
 import { FreindService } from '../../services/freind/freind.service';
-import { IResponseFreind } from '../../interfaces/freind/response-freind';
 import { IResponseUser } from '../../interfaces/freind/response-user';
 import { EditModalComponent } from '../../components/edit-modal/edit-modal.component';
 import { WebSocketService } from '../../services/websocket/websocket.service';

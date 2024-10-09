@@ -160,8 +160,4 @@ async getChatsUser(id: number) {
     });
     return participants;
   }
-
-  async getCommonChat(userId: number, freindId: number) {
-    const chat = this.chatRepository.findOne({where: {userId, }})
-  }
 }

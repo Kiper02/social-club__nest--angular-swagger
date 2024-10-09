@@ -26,8 +26,6 @@ export class MessageModalComponent implements OnInit {
   userId: number = 0;
   isHaveChat: boolean = false;
   chats: IResponseChat[] = [];
-  // isModal: boolean;
-  // freindId: number = 0;
 
   @Input() freind: Partial<IResponseFreind> = {};
 

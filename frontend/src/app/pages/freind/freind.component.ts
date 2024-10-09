@@ -1,6 +1,5 @@
 import {
   ApplicationRef,
-  ChangeDetectorRef,
   Component,
   OnInit,
 } from '@angular/core';
@@ -17,7 +16,6 @@ import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { ICreateRequest } from '../../interfaces/freind/create-request';
 import { MessageModalComponent } from '../../components/message-modal/message-modal.component';
-// import { MessageModalComponent } from '../../components/message-modal/message-modal.component';
 
 @Component({
   selector: 'app-freind',
@@ -120,11 +118,9 @@ export class FreindComponent implements OnInit {
   openModal(freind: IResponseFreind, event: Event) {
     this.selectedFreind = freind;
     this.freindService.showModal(event)
-    // this.messageModal = true;
   }
 
   closeModal() {
     this.freindService.hidenModal()
-    // this.messageModal = false;
   }
 }

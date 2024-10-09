@@ -16,7 +16,6 @@ export class MessageService {
   private messageSubject = new BehaviorSubject<IResponseMessage[]>([]);
   messages$ = this.messageSubject.asObservable();
   id: number = 0;
-  //  currentUser: Partial<IUser> = {};
 
   constructor(private http: HttpClient, private socketService: WebSocketService) { }
 

@@ -56,7 +56,7 @@ export class ProfileService {
     console.log(file);
     return this.http.put(`${environment.apiUrl}/user/avatar`, formData).pipe(
       tap(() => {
-        this.getUser(userId); // refresh user data and avatar URL
+        this.getUser(userId);
       })
     );
   }

@@ -66,10 +66,4 @@ export class ChatController {
         console.log(`запрос на получение`);
         return this.chatService.getAllChatParticipants(chatId);
     }
-
-    @Get('common')
-    getCommonChat(userId: number, freindId: number) {
-        
-    }
-
 }

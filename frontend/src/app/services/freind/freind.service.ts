@@ -58,16 +58,6 @@ export class FreindService {
     return this.http.get<IResponseFreind[]>(`${environment.apiUrl}/freind/${id}`)
   }
 
-
-  acceptRequest() {
-
-  }
-
-
-  editRequest() {
-
-  }
-
   getUsersAll() {
     return this.http.get<IResponseUser[]>(`${environment.apiUrl}/user`);
   }

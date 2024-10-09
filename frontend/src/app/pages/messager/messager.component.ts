@@ -15,7 +15,6 @@ import { IOneChat } from '../../interfaces/chat/one-chat';
 import { UsersModalComponent } from '../../components/users-modal/users-modal.component';
 import { ParticipantModalComponent } from '../../components/participant-modal/participant-modal.component';
 import { WebSocketService } from '../../services/websocket/websocket.service';
-import { IResponseUser } from '../../interfaces/freind/response-user';
 import { ProfileService } from '../../services/profile/profile.service';
 import { IUser } from '../../interfaces/profile/user';
 import { Subscription } from 'rxjs';
@@ -110,9 +109,8 @@ export class MessagerComponent implements OnInit {
     if (this.messageControl.invalid) {
       console.log(this.messageControl.invalid && this.messageControl.touched);
       this.messageControl.markAsTouched();
-      // Trigger change detection explicitly
       this.cdRef.detectChanges();
-      return; // Exit the function if the control is invalid
+      return;
     }
   
     const dto: ICreateMessage = {
@@ -124,7 +122,7 @@ export class MessagerComponent implements OnInit {
     if(this.chatId) {
       this.profileService.getCurrentUserInChat(this.userId).subscribe((user: IUser) => {
         const message: IResponseMessage = {
-          id: dto.userId, // or some other valid id
+          id: dto.userId,
           chatId: Number(this.chatId),
           userId: this.userId,
           text: dto.text,
@@ -141,11 +139,10 @@ export class MessagerComponent implements OnInit {
           },
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
-          files: [], // or some other valid files array
-          // add other required properties here
+          files: [], 
         };
         console.log(message);
-        this.messages.unshift(message); // добавляем сообщение в начало массива
+        this.messages.unshift(message);
       })
       this.messageService.createMessage(dto, this.chatId, this.file);
       this.isClip = false
@@ -154,55 +151,6 @@ export class MessagerComponent implements OnInit {
       this.messageId = this.messageService.id;
     }
   }
-  
-  
-
-  // createMessage() {
-  //   const dto: ICreateMessage = {
-  //     text: this.messageControl.value,
-  //     chatId: Number(this.chatId),
-  //     userId: this.userId
-  //   }
-  //   console.log(dto);
-  //   if(this.chatId) {
-  //     this.profileService.getCurrentUserInChat(this.userId).subscribe((user: IUser) => {
-  //       const message: IResponseMessage = {
-  //         id: dto.userId, // or some other valid id
-  //         chatId: Number(this.chatId),
-  //         userId: this.userId,
-  //         text: dto.text,
-  //         user: {
-  //           id: user.id,
-  //           surname: user.surname,
-  //           patronymic: user.patronymic,
-  //           password: user.password,
-  //           createdAt: user.createdAt,
-  //           email: user.email,
-  //           updatedAt: user.updatedAt,
-  //           name: user.name,
-  //           avatar: user.avatar,
-  //         },
-  //         createdAt: user.createdAt,
-  //         updatedAt: user.updatedAt,
-  //         files: [], // or some other valid files array
-  //         // add other required properties here
-  //       };
-  //       console.log(message);
-        
-  //       this.socketMessage(message);
-  //       // if (this.file) {
-  //         //   this.socketService.sendFile(this.file);
-  //         // }
-  //         this.messages.unshift(message); // добавляем сообщение в начало массива
-          
-  //       })
-  //       this.messageService.createMessage(dto, this.chatId, this.file);
-  //     this.isClip = false
-  //     this.messageControl.reset()
-  //     this.appRef.tick();
-  //     this.messageId = this.messageService.id;
-  //   }
-  // }
 
   handleFileInput(event: Event) {
     const input = event.target as HTMLInputElement;

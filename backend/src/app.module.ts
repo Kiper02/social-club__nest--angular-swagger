@@ -43,8 +43,7 @@ import { SocketModule } from './app/socket.module';
       database: process.env.DB_NAME,
       models: [User, Role, UserRole, Chat, ChatParticipants, File, Message, Freind, FreindRequest],
       autoLoadModels: true,
-      logging: false
-      // sync: {force: true}
+      logging: false,
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static')

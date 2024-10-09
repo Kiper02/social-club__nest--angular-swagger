@@ -8,4 +8,5 @@ export interface IResponseFreind {
   avatar: string;
   createdAt: string;
   updatedAt: string;
+  status: string;
 }

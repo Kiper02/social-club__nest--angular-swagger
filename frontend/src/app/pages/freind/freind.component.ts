@@ -106,6 +106,9 @@ export class FreindComponent implements OnInit {
       freindId: id,
       status: 'prending',
     };
+
+    
+
     this.freindService.createRequest(dto).subscribe((data: IMyRequest) => {
       const user = this.users.find((u) => u.id === id);
       if (user) {
@@ -123,4 +126,18 @@ export class FreindComponent implements OnInit {
   closeModal() {
     this.freindService.hidenModal()
   }
+
+
+  isFriend(userId: number): boolean {
+    // Проверяем, есть ли пользователя в списке друзей
+    return this.freinds.some(friend => friend.id === userId);
+}
+
+hasSentRequest(userId: number): boolean {
+    // Проверяем, отправил ли текущий пользователь запрос этому пользователю
+    return this.users.some(user => 
+        user.sentFreindRequests.some(request => request.recipientId === userId)
+    );
+}
+
 }

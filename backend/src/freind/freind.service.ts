@@ -92,16 +92,22 @@ export class FreindService {
 
   async getFreinds(userId: number) {
     const freinds = await this.freindRepository.findAll({ where: { userId } });
-    const users = await Promise.all(
+    
+    const usersWithStatus = await Promise.all(
       freinds.map(async (freind) => {
         const user = await this.userRepository.findOne({
           where: { id: freind.freindId },
         });
-        return user;
-      }),
+        if (user) {
+          return { ...user.toJSON(), status: freind.status }; // Добавляем статус дружбы
+        }
+        return null;
+      })
     );
-    return users;
+    
+    return usersWithStatus.filter(user => user !== null);
   }
+  
 
   async acceptRequest(acceptRequestDto: AcceptRequestDto) {
     const checkIsConflict = await this.freindRepository.findOne({

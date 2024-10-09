@@ -1,5 +1,6 @@
 import {
   ApplicationRef,
+  ChangeDetectorRef,
   Component,
   OnInit,
 } from '@angular/core';
@@ -46,6 +47,7 @@ export class FreindComponent implements OnInit {
   constructor(
     private freindService: FreindService,
     private appRef: ApplicationRef,
+    private cdr: ChangeDetectorRef
   ) {
     this.messageModal = freindService.isModal;
   }
@@ -100,23 +102,44 @@ export class FreindComponent implements OnInit {
       });
   }
 
+
   createRequestFreind(id: number) {
     const dto: ICreateRequest = {
-      userId: this.id,
-      freindId: id,
-      status: 'prending',
+        userId: this.id,
+        freindId: id,
+        status: 'pending',
     };
+
+    this.freindService.createRequest(dto).subscribe((data: IMyRequest) => {
+        const user = this.users.find((u) => u.id === id);
+        if (user) {
+            user.sentFreindRequests.push(data);  // Добавляем заявку
+        }
+        this.appRef.tick();  // Обновляем интерфейс
+    });
+
+    this.cdr.detectChanges();
+}
+
+
+  // createRequestFreind(id: number) {
+  //   console.log('отбрабтало');
+  //   const dto: ICreateRequest = {
+  //     userId: this.id,
+  //     freindId: id,
+  //     status: 'prending',
+  //   };
 
     
 
-    this.freindService.createRequest(dto).subscribe((data: IMyRequest) => {
-      const user = this.users.find((u) => u.id === id);
-      if (user) {
-        user.receivedFreindRequests.push(data);
-      }
-      this.appRef.tick();
-    });
-  }
+  //   this.freindService.createRequest(dto).subscribe((data: IMyRequest) => {
+  //     const user = this.users.find((u) => u.id === id);
+  //     if (user) {
+  //       user.receivedFreindRequests.push(data);
+  //     }
+  //     this.appRef.tick();
+  //   });
+  // }
 
   openModal(freind: IResponseFreind, event: Event) {
     this.selectedFreind = freind;

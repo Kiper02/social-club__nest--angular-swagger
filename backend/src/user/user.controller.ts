@@ -29,7 +29,7 @@ export class UserController {
   @ApiOperation({ summary: 'Создать пользователя' })
   @ApiResponse({ status: 200, type: User })
   @Roles('ADMIN')
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @UsePipes(ValidationPipe)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -38,7 +38,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Получить пользователя' })
   @ApiResponse({ status: 200, type: User })
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':id')
   getUser(@Param('id') id: string) {
     return this.userService.getUser(id);

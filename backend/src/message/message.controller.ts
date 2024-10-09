@@ -28,6 +28,7 @@ export class MessageController {
   @ApiOperation({ summary: 'Создать сообщения' })
   @ApiResponse({ status: 200, type: Message })
   @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard)
   @Post()
   createMessage(@Body() createMessageDto: CreateMessageDto) {
     return this.messageService.createMessage(createMessageDto);
@@ -35,6 +36,7 @@ export class MessageController {
 
   @ApiOperation({ summary: 'Получить сообщения' })
   @ApiResponse({ status: 200, type: [Message] })
+  @UseGuards(AuthGuard)
   @Get(':id')
   getMessagesByChatId(@Param('id') chatId: number) {
     return this.messageService.getMessagesByChatId(chatId);
